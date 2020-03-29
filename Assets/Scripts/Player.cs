@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        m_MoveDirection.Normalize();
         m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * m_MoovingSpeed * Time.fixedDeltaTime);
     }
 
