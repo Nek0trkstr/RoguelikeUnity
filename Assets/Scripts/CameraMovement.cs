@@ -15,5 +15,6 @@ public class CameraMovement : MonoBehaviour
         newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, m_MinPosition.x, m_MaxPosition.x);
         newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, m_MinPosition.y, m_MaxPosition.y);
         transform.position = Vector3.Lerp(transform.position, newCameraPosition, m_Smoothing);
+        GetComponent<Camera>().orthographicSize = 3;
     }
 }
