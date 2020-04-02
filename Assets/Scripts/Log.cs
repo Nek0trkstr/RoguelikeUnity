@@ -8,13 +8,11 @@ public class Log : Enemy
     public float m_ChaseRadius;
     private Vector3 m_TargetPosition;
     private Vector3 m_HomePosition;
-    private Animator m_Animator;
     
-
     void Awake()
     {
-        m_Animator = GetComponent<Animator>();
         m_HomePosition = GetComponent<Transform>().position;
+        m_Animator = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -25,6 +23,11 @@ public class Log : Enemy
 
     private void CalculateState()
     {
+        if (m_State == EnemyState.Stagger)
+        {
+            return;
+        }
+
         float distanceToTarget = Vector3.Distance(transform.position, m_TargetPosition);
         if ((distanceToTarget <= m_ChaseRadius) && (distanceToTarget > m_AttackRadius))
         {
@@ -47,16 +50,21 @@ public class Log : Enemy
         {
             case EnemyState.Idle:
                 m_Animator.SetFloat("Speed", 0);
-            break;
+                break;
             case EnemyState.Move:
                 transform.position = Vector3.MoveTowards(transform.position, m_TargetPosition, Time.deltaTime * m_MooveSpeed);
                 Vector3 moveDirection = m_TargetPosition - transform.position;
                 m_Animator.SetFloat("Vertical", moveDirection.y);
                 m_Animator.SetFloat("Horizontal", moveDirection.x);
                 m_Animator.SetFloat("Speed", moveDirection.sqrMagnitude);
-            break;
+                break;
             case EnemyState.Attack:
-            break;
+                Attack();
+                m_State = EnemyState.Move;
+                break;
+            case EnemyState.Stagger:
+                transform.Translate(new Vector3(0, 0, 0));
+                break;
         }
     }
 }

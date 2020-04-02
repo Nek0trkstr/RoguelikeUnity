@@ -5,5 +5,4 @@ using UnityEngine;
 public interface IBreakable
 {
     void ReceiveDamage(int i_ReceivedDamage);
-    void DestroySelf();
 }

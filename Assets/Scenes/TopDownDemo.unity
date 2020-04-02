@@ -6214,7 +6214,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: 8213902188476598959, guid: 2017adf4d67e74c6e89be5701cdd0bbf,
     type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9622642, g: 0.9622642, b: 0.9622642, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6250,7 +6250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724f171c4738b453fbc5046b24f77854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HealthPoints: 4
+  m_HealthPoints: 15
   m_MooveSpeed: 0.7
   m_EnemyName: Boris
   m_AttackRadius: 0.1
@@ -16240,7 +16240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2116320800
 MonoBehaviour:
   m_ObjectHideFlags: 0

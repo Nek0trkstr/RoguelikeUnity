@@ -6,8 +6,10 @@ public class PlayerHit : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D i_Other)
     {
-        Debug.Log("Attacked!");
         IBreakable otherObject = i_Other.GetComponent<IBreakable>();
-        otherObject.ReceiveDamage(5);
+        if (otherObject != null)
+        {
+            otherObject.ReceiveDamage(5);
+        }
     }
 }
