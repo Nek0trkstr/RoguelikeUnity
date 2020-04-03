@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IBreakable
 {
-    public int m_HealthPoints;
+    protected float m_HealthPoints;
     public float m_MooveSpeed;
     public string m_EnemyName;
+    public EnemyHealth m_MaxHealthPoints;
     protected bool m_IsDestroyed = false;
     protected EnemyState m_State = EnemyState.Idle;
     protected Animator m_Animator;
-
+    private bool m_IsAttacking = false;
+    
     public void ReceiveDamage(int i_Dmg)
     {
         m_HealthPoints = m_HealthPoints - i_Dmg;
@@ -26,8 +28,10 @@ public class Enemy : MonoBehaviour, IBreakable
 
     protected virtual void Attack()
     {
-        Debug.Log("Enemy attacks");
-        StartCoroutine(AttackCo());
+        if (m_IsAttacking == false)
+        {
+            StartCoroutine(AttackCo());
+        }
     }
 
     private void DestroySelf()
@@ -48,7 +52,10 @@ public class Enemy : MonoBehaviour, IBreakable
 
     private IEnumerator AttackCo()
     {
+        m_IsAttacking = true;
+        Debug.Log("Enemy attacks");
         yield return new WaitForSeconds(1f);
+        m_IsAttacking = false;
     }
 }
 
