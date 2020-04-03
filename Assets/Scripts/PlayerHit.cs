@@ -6,10 +6,15 @@ public class PlayerHit : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D i_Other)
     {
-        IBreakable otherObject = i_Other.GetComponent<IBreakable>();
-        if (otherObject != null)
+        if (i_Other.CompareTag("Hurtbox"))
         {
-            otherObject.ReceiveDamage(5);
+            IBreakable otherObject = i_Other.transform.parent.gameObject.GetComponent<IBreakable>();
+            if (otherObject != null)
+            {
+                Debug.Log("Atacked hurtbox");
+                otherObject.ReceiveDamage(5);
+            }
         }
+        
     }
 }

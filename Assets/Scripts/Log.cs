@@ -13,6 +13,7 @@ public class Log : Enemy
     {
         m_HomePosition = GetComponent<Transform>().position;
         m_Animator = GetComponent<Animator>();
+        m_HealthPoints = m_MaxHealthPoints.m_Health;
     }
 
     private void FixedUpdate()
@@ -60,7 +61,6 @@ public class Log : Enemy
                 break;
             case EnemyState.Attack:
                 Attack();
-                m_State = EnemyState.Move;
                 break;
             case EnemyState.Stagger:
                 transform.Translate(new Vector3(0, 0, 0));
