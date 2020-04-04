@@ -10,6 +10,6 @@ public class FloatReference : MonoBehaviour
 
     public float Value
     {
-        get { return m_UseConstantValue ? m_ConstantValue : m_FloatValue.m_Value; }
+        get { return m_UseConstantValue ? m_ConstantValue : m_FloatValue.m_RuntimeValue; }
     }
 }

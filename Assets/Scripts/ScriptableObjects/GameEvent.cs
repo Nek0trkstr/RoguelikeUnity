@@ -9,20 +9,19 @@ public class GameEvent : ScriptableObject
 
     public void Raise()
     {
-        for (int i = m_GameEventListeners.Count; i >= 0; i--)
+        for (int i = m_GameEventListeners.Count; i > 0; i--)
         {
-            m_GameEventListeners[i].OnRaise();
+            m_GameEventListeners[i-1].OnRaise();
         }
     }
 
     public void Register(GameEventListener i_Listener)
     {
-        m_GameEventListeners.Add((i_Listener));
+        m_GameEventListeners.Add(i_Listener);
     }
 
     public void Unregister(GameEventListener i_Listener)
     {
         m_GameEventListeners.Remove(i_Listener);
     }
-
 }

@@ -1,8 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+
 [CreateAssetMenu]
-public class FloatValue : ScriptableObject
+public class FloatValue : ScriptableObject, ISerializationCallbackReceiver
 {
-    public float m_Value;
+    public float m_InitialValue;
+
+    [NonSerialized]
+    public float m_RuntimeValue;
+
+    public void OnAfterDeserialize()
+    {
+        m_RuntimeValue = m_InitialValue;
+    }
+
+    public void OnBeforeSerialize() { }
+    
+    
 }

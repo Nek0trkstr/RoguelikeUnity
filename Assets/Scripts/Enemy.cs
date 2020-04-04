@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour, IBreakable
     protected Animator m_Animator;
     private bool m_IsAttacking = false;
     
-    public void ReceiveDamage(int i_Dmg)
+    public void ReceiveDamage(float i_Dmg)
     {
         m_HealthPoints = m_HealthPoints - i_Dmg;
         if(m_State != EnemyState.Stagger)
