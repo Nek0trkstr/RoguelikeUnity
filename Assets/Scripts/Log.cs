@@ -13,7 +13,7 @@ public class Log : Enemy
     {
         m_HomePosition = GetComponent<Transform>().position;
         m_Animator = GetComponent<Animator>();
-        m_HealthPoints = m_MaxHealthPoints.m_Health;
+        m_HealthPoints = m_MaxHealthPoints.m_Value;
     }
 
     private void FixedUpdate()

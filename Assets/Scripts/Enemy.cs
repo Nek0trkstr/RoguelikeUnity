@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IBreakable
 {
-    protected float m_HealthPoints;
     public float m_MooveSpeed;
-    public string m_EnemyName;
-    public EnemyHealth m_MaxHealthPoints;
+    public FloatValue m_MaxHealthPoints;
+    protected float m_HealthPoints;
     protected bool m_IsDestroyed = false;
     protected EnemyState m_State = EnemyState.Idle;
     protected Animator m_Animator;
