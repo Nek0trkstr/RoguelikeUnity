@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 [CreateAssetMenu]
-public class EnemyHealth : ScriptableObject
+public class FloatValue : ScriptableObject
 {
-    public float m_Health = 5;
+    public float m_Value;
 }
