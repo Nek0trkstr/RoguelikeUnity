@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHit : MonoBehaviour
+public class Hit : MonoBehaviour
 {
+    public FloatValue m_Damage;
     void OnTriggerEnter2D(Collider2D i_Other)
     {
         if (i_Other.CompareTag("Hurtbox"))
@@ -11,8 +12,7 @@ public class PlayerHit : MonoBehaviour
             IBreakable otherObject = i_Other.transform.parent.gameObject.GetComponent<IBreakable>();
             if (otherObject != null)
             {
-                Debug.Log("Atacked hurtbox");
-                otherObject.ReceiveDamage(5);
+                otherObject.ReceiveDamage(m_Damage.m_RuntimeValue);
             }
         }
         
