@@ -9,10 +9,10 @@ public class Hit : MonoBehaviour
     {
         if (i_Other.CompareTag("Hurtbox"))
         {
-            IBreakable otherObject = i_Other.transform.parent.gameObject.GetComponent<IBreakable>();
-            if (otherObject != null)
+            Hurtbox hurtbox = i_Other.GetComponent<Hurtbox>();
+            if (hurtbox != null)
             {
-                otherObject.ReceiveDamage(m_Damage.m_RuntimeValue);
+                hurtbox.ReceiveDamage(m_Damage.m_RuntimeValue);
             }
         }
         

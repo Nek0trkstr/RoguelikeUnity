@@ -9,10 +9,13 @@ public class Player : MonoBehaviour, IBreakable
     public float k_AttackAnimationLength = 0.85f;
     public FloatValue m_InitialHealth;
     public FloatValue m_CurrentHealth;
+    public FloatValue m_UntouchableAfterDmg;
     public GameEvent m_HealthEvent;
+    public int m_BlinksAfterDmg = 8;
     private Rigidbody2D m_RigidBody;
     private Animator m_Animator;
     private Vector2 m_MoveDirection;
+    private Renderer m_Renderer;
     private const string k_VerticalAnimationVar = "Vertical";
     private const string k_HorizontalAnimationVar = "Horizontal";
     private const string k_SpeedAnimationVar = "Speed";
@@ -27,6 +30,7 @@ public class Player : MonoBehaviour, IBreakable
         m_State = PlayerState.Idle;
         m_Animator = GetComponent<Animator>();
         m_RigidBody = GetComponent<Rigidbody2D>();
+        m_Renderer = GetComponent<Renderer>();
         m_CurrentHealth.m_RuntimeValue = m_InitialHealth.m_RuntimeValue;
         m_InputActions = new PlayerInputActions();
         m_InputActions.PlayerControls.Move.performed += ctx => m_MoveDirection = ctx.ReadValue<Vector2>();
@@ -94,13 +98,24 @@ public class Player : MonoBehaviour, IBreakable
 
     public void ReceiveDamage(float i_ReceivedDamage)
     {
-        Debug.Log("Player received dmg");
+        StartCoroutine(DoBlinksCo(m_BlinksAfterDmg, m_UntouchableAfterDmg.m_RuntimeValue));
         m_CurrentHealth.m_RuntimeValue -= i_ReceivedDamage;
         m_HealthEvent.Raise();
         if (m_CurrentHealth.m_RuntimeValue <= 0)
         {
             Debug.Log("Game Over");
         }
+    }
+    
+    IEnumerator DoBlinksCo(int i_BlinksNumber, float i_BlinkingLength)
+    {
+        float blingInterval = i_BlinkingLength / (i_BlinksNumber*2);
+        for (int i=0; i<i_BlinksNumber*2; i++) {
+            m_Renderer.enabled = !m_Renderer.enabled;
+            yield return new WaitForSeconds(blingInterval);
+        }
+        
+        m_Renderer.enabled = true;
     }
     
     private enum PlayerState

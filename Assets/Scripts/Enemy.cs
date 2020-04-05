@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,10 +12,12 @@ public class Enemy : MonoBehaviour, IBreakable
     protected EnemyState m_State = EnemyState.Idle;
     protected Animator m_Animator;
     private bool m_IsAttacking = false;
-    
+    protected Renderer m_Renderer;
+
     public void ReceiveDamage(float i_Dmg)
     {
         m_HealthPoints = m_HealthPoints - i_Dmg;
+        StartCoroutine(DoBlinksCo(3, 0.4f));
         if(m_State != EnemyState.Stagger)
         {
             StartCoroutine(StaggerCo());
@@ -44,7 +47,7 @@ public class Enemy : MonoBehaviour, IBreakable
         m_Animator.enabled = false;
         EnemyState interuptedState = m_State;
         m_State = EnemyState.Stagger;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         m_State = interuptedState;
         m_Animator.enabled = true;
     }
@@ -52,9 +55,19 @@ public class Enemy : MonoBehaviour, IBreakable
     private IEnumerator AttackCo()
     {
         m_IsAttacking = true;
-        Debug.Log("Enemy attacks");
         yield return new WaitForSeconds(1f);
         m_IsAttacking = false;
+    }
+    
+    IEnumerator DoBlinksCo(int i_BlinksNumber, float i_BlinkingLength)
+    {
+        float blingInterval = i_BlinkingLength / (i_BlinksNumber*2);
+        for (int i=0; i<i_BlinksNumber*2; i++) {
+            m_Renderer.enabled = !m_Renderer.enabled;
+            yield return new WaitForSeconds(blingInterval);
+        }
+        
+        m_Renderer.enabled = true;
     }
 }
 

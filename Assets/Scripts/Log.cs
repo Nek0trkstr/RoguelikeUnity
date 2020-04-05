@@ -14,6 +14,7 @@ public class Log : Enemy
         m_HomePosition = GetComponent<Transform>().position;
         m_Animator = GetComponent<Animator>();
         m_HealthPoints = m_MaxHealthPoints.m_RuntimeValue;
+        m_Renderer = GetComponent<Renderer>();
     }
 
     private void FixedUpdate()
