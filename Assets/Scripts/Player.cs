@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour, IBreakable
 {
-    public float m_MoovingSpeed = 2f;
+    public float k_MoovingSpeedBase = 3f;
     public float k_AttackAnimationLength = 0.85f;
     public FloatValue m_InitialHealth;
     public FloatValue m_CurrentHealth;
@@ -15,6 +16,7 @@ public class Player : MonoBehaviour, IBreakable
     private Rigidbody2D m_RigidBody;
     private Animator m_Animator;
     private Vector2 m_MoveDirection;
+    private float m_MoveSpeed;
     private Renderer m_Renderer;
     private const string k_VerticalAnimationVar = "Vertical";
     private const string k_HorizontalAnimationVar = "Horizontal";
@@ -33,7 +35,7 @@ public class Player : MonoBehaviour, IBreakable
         m_Renderer = GetComponent<Renderer>();
         m_CurrentHealth.m_RuntimeValue = m_InitialHealth.m_RuntimeValue;
         m_InputActions = new PlayerInputActions();
-        m_InputActions.PlayerControls.Move.performed += ctx => m_MoveDirection = ctx.ReadValue<Vector2>();
+        m_InputActions.PlayerControls.Move.performed += UpdateMoveDirection; 
         m_InputActions.PlayerControls.Attack.performed += _ => m_State = PlayerState.Attacking;
     }
     
@@ -55,10 +57,11 @@ public class Player : MonoBehaviour, IBreakable
                 break;
             case PlayerState.Mooving:
                 m_MoveDirection.Normalize();
+                
                 m_Animator.SetFloat(k_VerticalAnimationVar, m_MoveDirection.y);
                 m_Animator.SetFloat(k_HorizontalAnimationVar, m_MoveDirection.x);
-                m_Animator.SetFloat(k_SpeedAnimationVar, m_MoveDirection.sqrMagnitude);
-                m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * m_MoovingSpeed * Time.fixedDeltaTime);
+                m_Animator.SetFloat(k_SpeedAnimationVar, m_MoveSpeed);
+                m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * m_MoveSpeed * k_MoovingSpeedBase * Time.fixedDeltaTime);
                 break;
             case PlayerState.Attacking:
                 OnAttack();
@@ -116,6 +119,21 @@ public class Player : MonoBehaviour, IBreakable
         }
         
         m_Renderer.enabled = true;
+    }
+
+    private void UpdateMoveDirection(InputAction.CallbackContext i_Context)
+    {
+        Vector2 newMoveDirection = i_Context.ReadValue<Vector2>();
+        // Player character should look at last direction its moved
+        if (newMoveDirection != Vector2.zero)
+        {
+            m_MoveSpeed = Mathf.Clamp(newMoveDirection.sqrMagnitude, 0f, 1f);
+            m_MoveDirection = newMoveDirection;
+        }
+        else
+        {
+            m_MoveSpeed = 0f;
+        }
     }
     
     private enum PlayerState
