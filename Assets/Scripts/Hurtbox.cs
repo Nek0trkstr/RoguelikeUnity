@@ -27,7 +27,7 @@ public class Hurtbox : MonoBehaviour
         m_Parent.ReceiveDamage(i_ReceivedDamage);
     }
 
-    IEnumerator ToggleHitBoxCo(float i_Interval)
+    public IEnumerator ToggleHitBoxCo(float i_Interval)
     {
         m_Collider2D.enabled = false;
         yield return new WaitForSeconds(i_Interval);
