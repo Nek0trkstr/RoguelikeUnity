@@ -10,6 +10,7 @@ public class Hurtbox : MonoBehaviour
     public FloatValue m_UntouchableAfterDmg;
     private Collider2D m_Collider2D;
     private IBreakable m_Parent;
+    private bool m_IsColliderEnabled = true;
     
     private void Awake()
     {
@@ -29,8 +30,14 @@ public class Hurtbox : MonoBehaviour
 
     public IEnumerator ToggleHitBoxCo(float i_Interval)
     {
-        m_Collider2D.enabled = false;
-        yield return new WaitForSeconds(i_Interval);
-        m_Collider2D.enabled = true;
+        if (m_IsColliderEnabled)
+        {
+            m_IsColliderEnabled = false;
+            m_Collider2D.enabled = false;
+            yield return new WaitForSeconds(i_Interval);
+            m_Collider2D.enabled = true;
+            m_IsColliderEnabled = true;
+        }
+        
     }
 }

@@ -307,6 +307,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f4d29b8f-67b9-4e8e-906d-afb152906475
     m_ActionName: PlayerControls/Attack[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ecb12f31-6010-45ec-9ba1-0d2752ac6e4e
+    m_ActionName: PlayerControls/Dash[/Keyboard/leftShift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: PlayerControls
