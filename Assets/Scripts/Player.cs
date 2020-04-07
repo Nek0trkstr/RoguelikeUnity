@@ -19,16 +19,16 @@ public class Player : MonoBehaviour, IBreakable
     private Vector2 m_MoveDirection;
     private Hurtbox m_HurtBox;
     private float m_MoveSpeed;
-    private const string k_VerticalAnimationVar = "Vertical";
-    private const string k_HorizontalAnimationVar = "Horizontal";
-    private const string k_SpeedAnimationVar = "Speed";
-    private const string k_AttackAnimationTrigger = "Attack";
     private bool m_IsAttacking = false;
     private PlayerState m_State;
     private PlayerInputActions m_InputActions;
     private float k_DashSpeedMultiplier = 6f;
     private float k_MaxDashTime = 0.2f;
     private float m_RemainingDashTime;
+    private const string k_VerticalAnimationVar = "Vertical";
+    private const string k_HorizontalAnimationVar = "Horizontal";
+    private const string k_SpeedAnimationVar = "Speed";
+    private const string k_AttackAnimationTrigger = "Attack";
 
     private void Awake()
     {
@@ -41,7 +41,7 @@ public class Player : MonoBehaviour, IBreakable
         m_InputActions = new PlayerInputActions();
         m_InputActions.PlayerControls.Move.performed += OnUpdateMoveDirection; 
         m_InputActions.PlayerControls.Attack.performed += _ => m_State = PlayerState.Attacking;
-        m_InputActions.PlayerControls.Dash.performed += _ => m_State = PlayerState.Dash;
+        m_InputActions.PlayerControls.Dash.performed += _ => OnDash();
         m_RemainingDashTime = k_MaxDashTime;
     }
 
@@ -61,10 +61,10 @@ public class Player : MonoBehaviour, IBreakable
                 m_Animator.SetFloat(k_VerticalAnimationVar, m_MoveDirection.y);
                 m_Animator.SetFloat(k_HorizontalAnimationVar, m_MoveDirection.x);
                 m_Animator.SetFloat(k_SpeedAnimationVar, m_MoveSpeed);
-                m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * m_MoveSpeed * k_MoovingSpeedBase * Time.fixedDeltaTime);
+                m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * (m_MoveSpeed * k_MoovingSpeedBase * Time.fixedDeltaTime));
                 break;
             case PlayerState.Dash:
-                m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * m_MoveSpeed * k_MoovingSpeedBase * 4f * Time.fixedDeltaTime);
+                m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * (m_MoveSpeed * k_MoovingSpeedBase * 4f * Time.fixedDeltaTime));
                 StartCoroutine(DoBlinksCo(4, Time.fixedDeltaTime));
                 StartCoroutine(m_HurtBox.ToggleHitBoxCo(k_MaxDashTime));
                 m_RemainingDashTime -= Time.fixedDeltaTime;
@@ -73,7 +73,6 @@ public class Player : MonoBehaviour, IBreakable
                     m_RemainingDashTime = k_MaxDashTime;
                     m_State = PlayerState.Idle;
                 }
-
                 break;
             case PlayerState.Attacking:
                 OnAttack();
@@ -135,8 +134,8 @@ public class Player : MonoBehaviour, IBreakable
     private void OnUpdateMoveDirection(InputAction.CallbackContext i_Context)
     {
         Vector2 newMoveDirection = i_Context.ReadValue<Vector2>();
-        // Player character should look at last direction its moved
-        if (newMoveDirection != Vector2.zero || m_State != PlayerState.Dash)
+        // Dont update move direction if nothing is pressed
+        if (newMoveDirection != Vector2.zero && m_State != PlayerState.Dash)
         {
             m_MoveSpeed = Mathf.Clamp(newMoveDirection.sqrMagnitude, 0f, 1f);
             m_MoveDirection = newMoveDirection;
@@ -149,8 +148,10 @@ public class Player : MonoBehaviour, IBreakable
 
     private void OnDash()
     {
-        Debug.Log("Dash performed");
-        m_RigidBody.MovePosition(m_MoveDirection * m_MoveSpeed);
+        if (m_State != PlayerState.Attacking)
+        {
+            m_State = PlayerState.Dash;
+        }
     }
     
     private enum PlayerState
