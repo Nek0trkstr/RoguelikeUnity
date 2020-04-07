@@ -246,8 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 430fd0004d4764e749fd074b55753fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MoovingSpeed: 4
-  k_AttackAnimationLength: 0.6
+  k_MoovingSpeedBase: 4
+  k_AttackAnimationLength: 0.4
   m_InitialHealth: {fileID: 11400000, guid: 4d74ad1900a694b9ebbcd7817d4e5920, type: 2}
   m_CurrentHealth: {fileID: 11400000, guid: c0cb8345fc30f47dbbe26415bf9b8156, type: 2}
   m_UntouchableAfterDmg: {fileID: 11400000, guid: 38945977b15f2441e80d0101492c5bd4,
