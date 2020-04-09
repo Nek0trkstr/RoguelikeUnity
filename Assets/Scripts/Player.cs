@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,11 +18,13 @@ public class Player : MonoBehaviour, IBreakable
     private Hurtbox m_HurtBox;
     private float m_MoveSpeed;
     private bool m_IsAttacking = false;
+    private RaycastHit2D m_InteractiveObjectInrange;
     private PlayerState m_State;
     private PlayerInputActions m_InputActions;
     private float k_DashSpeedMultiplier = 6f;
     private float k_MaxDashTime = 0.2f;
     private float m_RemainingDashTime;
+    private InteractiveObjectsManager m_InteractiveObjectsManager = new InteractiveObjectsManager();
     private const string k_VerticalAnimationVar = "Vertical";
     private const string k_HorizontalAnimationVar = "Horizontal";
     private const string k_SpeedAnimationVar = "Speed";
@@ -39,8 +39,8 @@ public class Player : MonoBehaviour, IBreakable
         m_HurtBox = GetComponentInChildren<Hurtbox>();
         m_CurrentHealth.m_RuntimeValue = m_InitialHealth.m_RuntimeValue;
         m_InputActions = new PlayerInputActions();
-        m_InputActions.PlayerControls.Move.performed += OnUpdateMoveDirection; 
-        m_InputActions.PlayerControls.Attack.performed += _ => m_State = PlayerState.Attacking;
+        m_InputActions.PlayerControls.Move.performed += OnUpdateMoveDirection;
+        m_InputActions.PlayerControls.Attack.performed += OnAttack;
         m_InputActions.PlayerControls.Dash.performed += _ => OnDash();
         m_RemainingDashTime = k_MaxDashTime;
     }
@@ -62,6 +62,7 @@ public class Player : MonoBehaviour, IBreakable
                 m_Animator.SetFloat(k_HorizontalAnimationVar, m_MoveDirection.x);
                 m_Animator.SetFloat(k_SpeedAnimationVar, m_MoveSpeed);
                 m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * (m_MoveSpeed * k_MoovingSpeedBase * Time.fixedDeltaTime));
+                m_InteractiveObjectsManager.CheckForInteractiveObjectsInRange(transform, m_MoveDirection);
                 break;
             case PlayerState.Dash:
                 m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * (m_MoveSpeed * k_MoovingSpeedBase * 4f * Time.fixedDeltaTime));
@@ -75,22 +76,37 @@ public class Player : MonoBehaviour, IBreakable
                 }
                 break;
             case PlayerState.Attacking:
-                OnAttack();
+                if (!m_IsAttacking)
+                {
+                    StartCoroutine(AttackCo());
+                }
+
                 break;
             case PlayerState.Stagger:
                 break;
         }
     }
 
-    private void OnAttack()
+    private void Interact()
     {
-        if(!m_IsAttacking)
+        
+    }
+
+    private void OnAttack(InputAction.CallbackContext i_Ctx)
+    {
+        RaycastHit2D interactiveObjectHit = m_InteractiveObjectsManager.InteractiveObjectInRange;
+        if (interactiveObjectHit)
         {
-            StartCoroutine(Attack());
+            IInteractive interactiveObject =  interactiveObjectHit.collider.GetComponent<IInteractive>();
+            interactiveObject.Interact();
+        }
+        else
+        {
+            m_State = PlayerState.Attacking;
         }
     }
 
-    private IEnumerator Attack()
+    private IEnumerator AttackCo()
     {
         m_IsAttacking = true;
         m_Animator.SetTrigger(k_AttackAnimationTrigger);
@@ -153,6 +169,12 @@ public class Player : MonoBehaviour, IBreakable
             m_State = PlayerState.Dash;
         }
     }
+
+    // private void CheckForInteractiveObjectsInRange()
+    // {
+    //     LayerMask mask = LayerMask.GetMask("Interactable");
+    //     m_InteractiveObjectInrange = Physics2D.Raycast(transform.position, m_MoveDirection, 0.25f, mask);
+    // }
     
     private enum PlayerState
     {
@@ -161,5 +183,32 @@ public class Player : MonoBehaviour, IBreakable
         Dash,
         Attacking,
         Stagger,
+    }
+
+    internal class InteractiveObjectsManager
+    {
+        private RaycastHit2D m_InteractiveObjectInRange;
+        public RaycastHit2D InteractiveObjectInRange
+        {
+            get => m_InteractiveObjectInRange;
+            set
+            {
+                if (m_InteractiveObjectInRange.collider != value.collider)
+                {
+                    if (m_InteractiveObjectInRange)
+                    {
+                        m_InteractiveObjectInRange.collider.GetComponent<IInteractive>().Close();
+                    }
+                    
+                    m_InteractiveObjectInRange = value;
+                }
+            }
+        }
+        
+        public void CheckForInteractiveObjectsInRange(Transform i_Transform, Vector3 i_MoveDirection)
+        {
+            LayerMask mask = LayerMask.GetMask("Interactable");
+            InteractiveObjectInRange = Physics2D.Raycast(i_Transform.position, i_MoveDirection, 0.25f, mask);
+        }
     }
 }

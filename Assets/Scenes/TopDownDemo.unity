@@ -386,7 +386,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47220016}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
@@ -15849,7 +15849,7 @@ GameObject:
   - component: {fileID: 926221657}
   - component: {fileID: 926221656}
   - component: {fileID: 926221655}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15962,7 +15962,9 @@ MonoBehaviour:
   m_DialogToShow: {fileID: 1627928256}
   m_DialogText: {fileID: 47220018}
   m_DialogContext: Hallo madafucka
-  m_IsPlayerInRange: 0
+  m_SignInteractedEvent: {fileID: 11400000, guid: 7fffd2ac4e0764e2e893690f9bbfc296,
+    type: 2}
+  m_SignCloseEvent: {fileID: 11400000, guid: 40445bad6d37049898453c7c68018377, type: 2}
 --- !u!61 &926221657
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16312,13 +16314,16 @@ GameObject:
   - component: {fileID: 1627928257}
   - component: {fileID: 1627928259}
   - component: {fileID: 1627928258}
+  - component: {fileID: 1627928262}
+  - component: {fileID: 1627928261}
+  - component: {fileID: 1627928260}
   m_Layer: 5
   m_Name: DialogBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1627928257
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16346,7 +16351,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1627928256}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -16376,6 +16381,72 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1627928256}
   m_CullTransparentMesh: 0
+--- !u!114 &1627928260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627928256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f57aefe6ab041768c43b8abd926c0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Event: {fileID: 11400000, guid: 40445bad6d37049898453c7c68018377, type: 2}
+  m_Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1627928262}
+        m_MethodName: OnDialogCloseEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1627928261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627928256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f57aefe6ab041768c43b8abd926c0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Event: {fileID: 11400000, guid: 7fffd2ac4e0764e2e893690f9bbfc296, type: 2}
+  m_Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1627928262}
+        m_MethodName: OnDialogInteractionEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1627928262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627928256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb3635715e8684613a1ce28c083be7fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1650542038
 GameObject:
   m_ObjectHideFlags: 0

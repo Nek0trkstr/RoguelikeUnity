@@ -5,41 +5,43 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
-public class Sign : MonoBehaviour
+public class Sign : MonoBehaviour, IInteractive
 {
     public GameObject m_DialogToShow;
     public Text m_DialogText;
     public string m_DialogContext;
-    public bool m_IsPlayerInRange;
+    public GameEvent m_SignInteractedEvent;
+    public GameEvent m_SignCloseEvent;
+    private bool m_IsPlayerInRange;
     private PlayerInputActions m_InputActions;
     private double m_LastActionTriggerTime = 0;
-    
+
     private void Awake()
     {
         m_InputActions = new PlayerInputActions();
-        m_InputActions.PlayerControls.Attack.performed += OnPlayerAction;
+        // m_InputActions.PlayerControls.Attack.performed += OnPlayerAction;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            m_IsPlayerInRange = true;
-        }
-        
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            m_IsPlayerInRange = false;
-            if (m_DialogToShow.activeInHierarchy)
-            {
-                m_DialogToShow.SetActive(false);
-            }
-        }
-    }
+    // private void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         m_IsPlayerInRange = true;
+    //     }
+    //     
+    // }
+    //
+    // private void OnTriggerExit2D(Collider2D other)
+    // {
+    //     if (other.CompareTag("Player"))
+    //     {
+    //         m_IsPlayerInRange = false;
+    //         if (m_DialogToShow.activeInHierarchy)
+    //         {
+    //             m_DialogToShow.SetActive(false);
+    //         }
+    //     }
+    // }
 
     private void OnPlayerAction(InputAction.CallbackContext i_Ctx)
     {
@@ -56,6 +58,16 @@ public class Sign : MonoBehaviour
                 m_DialogText.text = m_DialogContext;
             }
         }
+    }
+
+    public void Interact()
+    {
+        m_SignInteractedEvent.Raise();
+    }
+
+    public void Close()
+    {
+        m_SignCloseEvent.Raise();
     }
     
     private void OnEnable()

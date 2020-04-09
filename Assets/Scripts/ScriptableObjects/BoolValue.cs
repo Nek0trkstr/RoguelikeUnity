@@ -2,12 +2,12 @@
 using UnityEngine;
 
 [CreateAssetMenu]
-public class FloatValue : ScriptableObject, ISerializationCallbackReceiver
+public class BoolValue : ScriptableObject, ISerializationCallbackReceiver
 {
-    public float m_InitialValue;
+    public bool m_InitialValue;
 
     [NonSerialized]
-    public float m_RuntimeValue;
+    public bool m_RuntimeValue;
 
     public void OnAfterDeserialize()
     {
