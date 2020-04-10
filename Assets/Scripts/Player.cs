@@ -87,11 +87,6 @@ public class Player : MonoBehaviour, IBreakable
         }
     }
 
-    private void Interact()
-    {
-        
-    }
-
     private void OnAttack(InputAction.CallbackContext i_Ctx)
     {
         RaycastHit2D interactiveObjectHit = m_InteractiveObjectsManager.InteractiveObjectInRange;
@@ -170,12 +165,6 @@ public class Player : MonoBehaviour, IBreakable
         }
     }
 
-    // private void CheckForInteractiveObjectsInRange()
-    // {
-    //     LayerMask mask = LayerMask.GetMask("Interactable");
-    //     m_InteractiveObjectInrange = Physics2D.Raycast(transform.position, m_MoveDirection, 0.25f, mask);
-    // }
-    
     private enum PlayerState
     {
         Idle,
@@ -185,9 +174,11 @@ public class Player : MonoBehaviour, IBreakable
         Stagger,
     }
 
-    internal class InteractiveObjectsManager
+    private class InteractiveObjectsManager
     {
         private RaycastHit2D m_InteractiveObjectInRange;
+        private const string k_InteractableObjectsLayer = "Interactable";
+        
         public RaycastHit2D InteractiveObjectInRange
         {
             get => m_InteractiveObjectInRange;
@@ -197,6 +188,7 @@ public class Player : MonoBehaviour, IBreakable
                 {
                     if (m_InteractiveObjectInRange)
                     {
+                        // End interaction with previous InteractiveObject
                         m_InteractiveObjectInRange.collider.GetComponent<IInteractive>().Close();
                     }
                     
@@ -207,7 +199,7 @@ public class Player : MonoBehaviour, IBreakable
         
         public void CheckForInteractiveObjectsInRange(Transform i_Transform, Vector3 i_MoveDirection)
         {
-            LayerMask mask = LayerMask.GetMask("Interactable");
+            LayerMask mask = LayerMask.GetMask(k_InteractableObjectsLayer);
             InteractiveObjectInRange = Physics2D.Raycast(i_Transform.position, i_MoveDirection, 0.25f, mask);
         }
     }
