@@ -62,7 +62,7 @@ public class Player : MonoBehaviour, IBreakable
                 m_Animator.SetFloat(k_HorizontalAnimationVar, m_MoveDirection.x);
                 m_Animator.SetFloat(k_SpeedAnimationVar, m_MoveSpeed);
                 m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * (m_MoveSpeed * k_MoovingSpeedBase * Time.fixedDeltaTime));
-                m_InteractiveObjectsManager.CheckForInteractiveObjectsInRange(transform, m_MoveDirection);
+                m_InteractiveObjectsManager.CheckForInteractiveObjectsInRange(transform.position, m_MoveDirection);
                 break;
             case PlayerState.Dash:
                 m_RigidBody.MovePosition(m_RigidBody.position + m_MoveDirection * (m_MoveSpeed * k_MoovingSpeedBase * 4f * Time.fixedDeltaTime));
@@ -174,7 +174,7 @@ public class Player : MonoBehaviour, IBreakable
         Stagger,
     }
 
-    private class InteractiveObjectsManager
+    public class InteractiveObjectsManager
     {
         private RaycastHit2D m_InteractiveObjectInRange;
         private const string k_InteractableObjectsLayer = "Interactable";
@@ -197,10 +197,10 @@ public class Player : MonoBehaviour, IBreakable
             }
         }
         
-        public void CheckForInteractiveObjectsInRange(Transform i_Transform, Vector3 i_MoveDirection)
+        public void CheckForInteractiveObjectsInRange(Vector3 i_StartPosition, Vector3 i_MoveDirection)
         {
             LayerMask mask = LayerMask.GetMask(k_InteractableObjectsLayer);
-            InteractiveObjectInRange = Physics2D.Raycast(i_Transform.position, i_MoveDirection, 0.25f, mask);
+            InteractiveObjectInRange = Physics2D.Raycast(i_StartPosition, i_MoveDirection, 0.25f, mask);
         }
     }
 }

@@ -6251,7 +6251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MooveSpeed: 0.7
   m_MaxHealthPoints: {fileID: 11400000, guid: eb5a23ae15b284373ad26bb9f5f03bca, type: 2}
-  m_AttackRadius: 1.2
+  m_AttackRadius: 1
   m_ChaseRadius: 5
 --- !u!61 &292083097
 BoxCollider2D:
