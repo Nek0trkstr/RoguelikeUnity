@@ -16,6 +16,9 @@ public class Sign : MonoBehaviour, IInteractive
 
     public void Close()
     {
-        m_SignCloseEvent.Raise();
+        if (m_SignCloseEvent)
+        {
+            m_SignCloseEvent.Raise();
+        }
     }
 }
