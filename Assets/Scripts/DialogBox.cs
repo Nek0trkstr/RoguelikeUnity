@@ -7,6 +7,7 @@ public class DialogBox : MonoBehaviour
 {
     private Image m_DialogImage;
     private Text m_DialogTextObj;
+    public StringValue m_MessageToShow;
 
     private void Awake()
     {
@@ -16,9 +17,9 @@ public class DialogBox : MonoBehaviour
 
     public void OnDialogInteractionEvent()
     {
+        m_DialogTextObj.text = m_MessageToShow.m_RuntimeValue;
         m_DialogImage.enabled = !m_DialogImage.enabled;
         m_DialogTextObj.enabled = !m_DialogTextObj.enabled;
-        m_DialogTextObj.text = "Event worked!";
     }
 
     public void OnDialogCloseEvent()
